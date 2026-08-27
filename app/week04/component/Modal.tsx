@@ -1,4 +1,3 @@
-
 export default function Modal ({ open, onClose, task }){
 
   if (!open || !task) {
