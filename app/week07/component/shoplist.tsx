@@ -42,7 +42,7 @@ export default function Shoplist({ data }) {
                         <div key={shop.id} className="border rounded-1xl p-4">
                             <h2 className="font-semibold">
                                 {shop.title}
-                            </h2>
+                            </h2> 
                             <p> Open status: {shop.openstatus} </p>
                             <Link
                                 href={`/week07/${shop.id}`}
