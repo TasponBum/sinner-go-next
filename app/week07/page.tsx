@@ -1,22 +1,37 @@
 import { Suspense } from "react";
-import { shops } from "./component/shopitem";
+//import { shops } from "./components/shopItem";
 import Loading from "./component/loading";
-import Shoplist from "./component/shoplist";
+import ShopList from "./component/shoplist";
 
-export default function Firstpage() {
-    return (
-        <>
-        <div className="max-w-3xl mx-auto my-6 justify-center">
-            <h1 className="text-2xl font-bold text-center">
-                Shop list
-            </h1>
+export default async function ShopPage(){
+
+    let shops ={};
+      try {
+        const resData = await fetch(`http://localhost:8000/shops/`);
+
+        if(!resData.ok){
+          throw new Error(`Network response was not ok`);
+        }
+        shops = await resData.json();
+
+        console.log(`${shops}`);
+      }catch(error){
+        console.log(`Error fetching data: ${error}`);
         
-        <Suspense fallback={<Loading />}>
-            <Shoplist data={shops} />
-        </Suspense>
+      }
+
+    return(
+        <div className="max-w-3xl mx-auto mt-6">
+            <h1 className="text-3xl font-bold">
+                Shop List
+            </h1>
+
+            <Suspense fallback={<Loading/>}>
+                
+                <ShopList data={shops} />
+            </Suspense>
 
 
         </div>
-        </>
     );
 }
