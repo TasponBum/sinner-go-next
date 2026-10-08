@@ -36,7 +36,7 @@ export default async function ShopDetail({params}) {
 
     let shop ={};
       try {
-        const resData = await  fetch(`http://localhost:8000/shops/${id}`);
+        const resData = await  fetch(`http://localhost:8000/api/shops/${id}`);
 
         if(!resData.ok){
           throw new Error(`Network response was not ok`);
@@ -52,9 +52,8 @@ export default async function ShopDetail({params}) {
 
     const Status = (sta: boolean) => {
         if (sta)
-            return <span style={{ color: "green" }}>open</span>;
-
-        return <span style={{ color: "red" }}>close</span>;
+          return <span style={{ color: "green" }}>open</span>
+          return <span style={{ color: "red" }}>close</span>;
     };
 
 
@@ -67,11 +66,11 @@ export default async function ShopDetail({params}) {
       </h1>
 
       <div
-        key={shop.shopId}
+        key={shop.ShopID}
         className="border rounded-lg p-4 m-4"
       >
         <p className="mt-4 font-semibold">
-          ID:{shop.shopId}
+          ID:{shop.ShopID}
         </p>
         <p className="my-4">
           Title:{shop.shopName}
@@ -80,10 +79,10 @@ export default async function ShopDetail({params}) {
           Type:{shop.shopType}
         </p>
         <p className="my-4">
-          Loc: Lat: {shop.shopLoc.lat} Lon: {shop.shopLoc.lon}
+        Loc: lat: {shop.shopLo?.lat} long: {shop.shopLo?.long}
         </p>
         <p className="my-4">
-          Open Status:{Status(shop.shopstatus)}
+          Open Status:{Status(shop.shopStatus)}
         </p>
       </div>
 
