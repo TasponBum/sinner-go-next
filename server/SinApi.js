@@ -2,6 +2,8 @@ import express, { response } from 'express';
 import db from './config/firebase.js';
 import cors from 'cors'
 import bodyParser from 'body-parser';
+import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 
 const app = express();
 const port = 8000;
@@ -186,7 +188,7 @@ const createShop = async (req, res) => {
 }
  
 // App route: /api/shops (Method: POST)
-// Endpoint: http://localhost:xxxx/api/shops
+// Endpoint: http://localhost:8000/api/shops
 app.post('/api/shops', (req, res) => {
   try {
     createShop(req, res);
@@ -258,4 +260,84 @@ app.put('/api/shops/:id', (req, res) => {
     });
   }
 });
+  
+// Login Route: http://localhost:8009/api/login
+app.post('/api/login', async (req, res) => {
+  const JWT_SECRET="REACT-NEXTJS-KHAEG"
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email and password are required",
+      });
+    }
+
+    // Query users collection by email
+    const snapshot = await db
+      .collection("users")
+      .where("email", "==", email.toLowerCase().trim())
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    const userDoc = snapshot.docs[0];
+
+    const user = {
+      id: userDoc.id,
+      ...userDoc.data(),
+    };
+
+    // Compare entered password with stored password hash
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      user.passwordHash
+    );
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    // Create JWT token
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    // Do not return passwordHash to frontend
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    };
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: safeUser,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+});
+
 

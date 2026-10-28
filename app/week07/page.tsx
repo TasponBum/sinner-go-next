@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Loading from "./component/loading";
 import ShopList from "./component/shoplist";
 
+
 export default async function ShopPage(){
 
     let shops ={};

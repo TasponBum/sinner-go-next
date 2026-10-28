@@ -3,11 +3,20 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import UserProfile from "./UserProfile";
+import LoginButton from "./Login";
+import LogoutButton from "./Logout";
 
 
 export default function ShopList({data}){
 //alert(data);
     const [keyword,setKeyword] = useState("");
+    
+    let stroedUser = "";
+    if(typeof window !== 'undefined') {
+        stroedUser = localStorage.getItem("user");
+    }
+    
     const filterShops = data.filter(
         (item) => {
             const searchText = keyword.toLowerCase();
@@ -81,7 +90,12 @@ export default function ShopList({data}){
                     + Add New
                     </Link>
                     </div>
+            
             <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <UserProfile />
+                    {stroedUser ? <LogoutButton /> : <LoginButton />}
+                </div>
                 
                 
                 {
