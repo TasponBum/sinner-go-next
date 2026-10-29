@@ -70,13 +70,15 @@ export default function HerbHome( )
         </div>
         <div>
           <label className="block text-sm">ประเภทสมุนไพร:</label>
-          <input
-            type="text"
+          <select
             value={type}
             onChange={(e) => setType(e.target.value)}
             className="w-full border p-2 rounded"
-            placeholder="กรอกประเภท"
-            />
+          >
+            <option value="">เลือกประเภท</option>
+            <option value="สมุนไพรทั่วไป">สมุนไพรทั่วไป</option>
+            <option value="สมุนไพรทางการแพทย์">สมุนไพรทางการแพทย์</option>
+          </select>
         </div>
         <div>
           <label className="block text-sm">ผู้จัดจำหน่าย:</label>
