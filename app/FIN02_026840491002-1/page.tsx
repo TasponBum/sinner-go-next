@@ -1,5 +1,5 @@
-import Homepage from "./component/MyHearbsFrom";
+import MyHomePage from "./component/MyHomePage";
 
 export default function Page() {
-  return <Homepage />;
+  return <MyHomePage />;
 }
